@@ -1,7 +1,7 @@
 {
     "name": "api-complete",
     "displayName": "api-complete",
-    "description": "todo",
+    "description": "reduce writing api code and provide mock feature",
     "version": "0.0.1",
     "engines": {
         "vscode": "^1.57.0"
@@ -12,7 +12,8 @@
     "activationEvents": [
         "onLanguage:javascript",
         "onLanguage:typescript",
-        "onCommand:api-complete.mock"
+        "onCommand:api-complete.mock",
+        "onCommand:api-complete.clearMockData"
     ],
     "main": "./dist/extension.js",
     "contributes": {
