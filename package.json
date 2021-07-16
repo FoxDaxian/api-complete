@@ -1,5 +1,6 @@
 {
     "name": "api-complete",
+    "publisher": "foxDaxian",
     "displayName": "api-complete",
     "description": "reduce writing api code and provide mock feature",
     "version": "0.0.1",
