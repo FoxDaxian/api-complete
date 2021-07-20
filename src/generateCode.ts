@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import parse from './utils/parse';
+import showLog from './utils/showLog';
 
 export default (context: vscode.ExtensionContext) => {
     const state: vscode.Memento = context.workspaceState;
@@ -7,15 +8,13 @@ export default (context: vscode.ExtensionContext) => {
         'api-complete.generateCode',
         (uri, endLen) => {
             if (!vscode.workspace.workspaceFolders) {
-                return vscode.window.showInformationMessage(
+                return showLog(
                     `Open a folder or workspace... (File -> Open Folder)`
                 );
             }
 
             if (!vscode.workspace.workspaceFolders.length) {
-                return vscode.window.showInformationMessage(
-                    `You've not added any folder in the workspace`
-                );
+                return showLog(`You've not added any folder in the workspace`);
             }
             if (!uri || !endLen) {
                 return;
