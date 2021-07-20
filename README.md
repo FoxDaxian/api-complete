@@ -21,3 +21,7 @@ start mock server
 clear 
 
 clear all mock api
+
+## Demo
+
+![](https://raw.githubusercontent.com/FoxDaxian/FoxDaxian.github.io/master/assets/picgo/20210720183555.gif)
