@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import * as koa from 'koa';
 import getWorkspacePath from './utils/getWorkspacePath';
-import { RequestInfo } from './utils/parse';
+import { MockApi } from './utils/parse';
 import randomRes from './utils/randomRes';
 import showLog from './utils/showLog';
 import * as Net from 'net';
@@ -10,10 +10,6 @@ import Config from './utils/config';
 import request, { Method } from 'axios';
 import cookies, { cookies2String } from './utils/koa-cookies';
 import * as bodyParser from 'koa-bodyparser';
-
-interface MockApi {
-    [key: string]: RequestInfo;
-}
 
 interface Sockets {
     [key: string]: Net.Socket;

@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 
-function generateCode () {
+function generateCode (document: vscode.TextDocument) {
     vscode.window.activeTextEditor?.insertSnippet(
         new vscode.SnippetString(
             `// @ac-start
@@ -24,7 +24,7 @@ function generateCode () {
 // @ac-end
 `
         ),
-        new vscode.Range(0, 0, 0, 0)
+        new vscode.Range(document.lineCount - 1, 0, document.lineCount - 1, 0)
     );
 }
 
@@ -33,7 +33,7 @@ export default () => {
         const document = vscode.window.activeTextEditor?.document;
         if (!uri) {
             if (document) {
-                generateCode();
+                generateCode(document);
             }
             return;
         }
@@ -41,7 +41,7 @@ export default () => {
         if (!document) {
             return;
         }
-        generateCode();
+        generateCode(document);
         
     });
 };

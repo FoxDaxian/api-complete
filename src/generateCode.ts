@@ -26,21 +26,15 @@ export default (context: vscode.ExtensionContext) => {
             for (let i: number = endLen; i >= 0; --i) {
                 let lineContent: string = document.lineAt(i).text;
                 if (lineContent.indexOf('@ac-start') >= 0) {
-                    vscode.window.activeTextEditor?.insertSnippet(
-                        new vscode.SnippetString(
-                            parse(
-                                document.getText(
-                                    new vscode.Range(
-                                        i,
-                                        0,
-                                        endLen,
-                                        lineContent.length
-                                    )
-                                ),
-                                state
-                            )
+                    const { textStr, info } = parse(
+                        document.getText(
+                            new vscode.Range(i, 0, endLen, lineContent.length)
                         ),
-                        new vscode.Range(endLen + 1, 0, endLen + 1, 0)
+                        state
+                    );
+                    vscode.window.activeTextEditor?.insertSnippet(
+                        new vscode.SnippetString(textStr),
+                        new vscode.Range(endLen + 1, 0, endLen + info.lines, 500) // todo
                     );
                     break;
                 }

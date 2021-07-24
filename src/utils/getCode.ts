@@ -18,17 +18,25 @@ export default (requestInfo: RequestInfo) => {
 
 const generates = {
     typescript(requestInfo: RequestInfo) {
-        return `
+        const textStr: string = `
 ${requestInfo.request}
 ${requestInfo.response}
 export function ${requestInfo.name}(param: ${requestInfo.name}Param): Promise<${requestInfo.name}Res> {
     return request.${requestInfo.method}('${requestInfo.url}', param);
-}`;
+}\n\n`;
+        return {
+            textStr,
+            lines: textStr.split('\n').length,
+        };
     },
     javascript(requestInfo: RequestInfo) {
-        return `
+        const textStr = `
 export function ${requestInfo.name}(param) {
     return request.${requestInfo.method}('${requestInfo.url}', param);
-}`;
+}\n\n`;
+        return {
+            textStr,
+            lines: textStr.split('\n').length,
+        };
     },
 };

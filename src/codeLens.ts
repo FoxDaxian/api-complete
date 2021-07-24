@@ -40,10 +40,10 @@ class MyCodeLens implements CodeLensProvider {
             }
         }
         if (used) {
-            range = new Range(0, 0, 0, 0);
+            range = new Range(codeLensLine, 0, codeLensLine, 0);
             codeLensRes.push(
                 new CodeLens(range, {
-                    title: 'add new api',
+                    title: 'add new api(+)',
                     command: 'api-complete.addApi',
                     arguments: [document.uri],
                 }),

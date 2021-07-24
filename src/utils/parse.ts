@@ -18,14 +18,21 @@ const space =
 const comment = new RegExp(`\/\/${space}`, 'g');
 const startFlag = '@ac-start';
 
+
 const requestInfo = {
     name: 'fetchData',
     method: 'get',
     url: '',
     request: '',
     response: '',
+    lines: 0,
 };
 export type RequestInfo = typeof requestInfo;
+
+export interface MockApi {
+    [key: string]: RequestInfo;
+}
+
 
 type RequestInfoKey = keyof typeof requestInfo;
 export default (text: string, state: vscode.Memento) => {
@@ -57,7 +64,9 @@ export default (text: string, state: vscode.Memento) => {
                             url.split('/').slice(-2).join('/')
                         )}`;
                     } else {
-                        requestInfo[curText as RequestInfoKey] = partText;
+                        requestInfo[
+                            curText as Exclude<RequestInfoKey, 'lines'>
+                        ] = partText;
                     }
                     break;
                 } else {
@@ -69,10 +78,7 @@ export default (text: string, state: vscode.Memento) => {
         stack.push(textArr[i]);
     }
 
-    state.update(apiKey, {
-        ...state.get(apiKey, {}),
-        [requestInfo.url]: {...requestInfo},
-    });
+    const _requestInfo = { ...requestInfo };
     requestInfo.request = json2interface(
         JSON.parse(`${requestInfo.request}`),
         requestInfo.name
@@ -82,6 +88,15 @@ export default (text: string, state: vscode.Memento) => {
         requestInfo.name,
         'Res'
     );
-
-    return getCode(requestInfo);
+    const { textStr, lines } = getCode(requestInfo);
+    _requestInfo.lines = lines;
+    const prevState: MockApi = state.get(apiKey, {});
+    prevState[requestInfo.url] = _requestInfo;
+    state.update(apiKey, {
+        ...prevState,
+    });
+    return {
+        textStr,
+        info: _requestInfo,
+    };
 };
