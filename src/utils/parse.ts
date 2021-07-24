@@ -57,7 +57,6 @@ export default (text: string, state: vscode.Memento) => {
                             url.split('/').slice(-2).join('/')
                         )}`;
                     } else {
-                        // 有可能还没获取到name
                         requestInfo[curText as RequestInfoKey] = partText;
                     }
                     break;

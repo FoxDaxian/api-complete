@@ -19,8 +19,6 @@ class MyCodeLens implements CodeLensProvider {
         const codeLensRes: CodeLens[] = [];
         let used: boolean = false;
         let range: Range;
-        // 根据注释来区分地址 请求参数 返回参数
-        // 能不能不用mock，直接返回一些随机参数呢？这个点子不错？
         const codeLensLine: number = document.lineCount - 1;
         for (let i: number = 0; i < codeLensLine; ++i) {
             const lineContent: string = document.lineAt(i).text;

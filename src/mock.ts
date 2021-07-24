@@ -6,6 +6,10 @@ import randomRes from './utils/randomRes';
 import showLog from './utils/showLog';
 import * as Net from 'net';
 import StatusBar from './utils/statusBar';
+import Config from './utils/config';
+import request, { Method } from 'axios';
+import cookies, { cookies2String } from './utils/koa-cookies';
+import * as bodyParser from 'koa-bodyparser';
 
 interface MockApi {
     [key: string]: RequestInfo;
@@ -79,15 +83,35 @@ export default (context: vscode.ExtensionContext) => {
             return showLog(`Need folder in the workspace`);
         }
 
+        app.use(cookies);
+        app.use(bodyParser());
+
         app.use(async (ctx) => {
             const mockApi: MockApi = state.get(apiKey, {});
             const { url, method } = ctx;
+
             if (url === '/favicon.ico') {
                 return (ctx.status = 204);
             }
-            // 解析respone，生成随机对象即可
             if (mockApi[url] && mockApi[url].method === method.toLowerCase()) {
                 ctx.body = randomRes(mockApi[url].response);
+            } else if (Config.getProxy) {
+                try {
+                    const response = await request({
+                        method: method.toLowerCase() as Method,
+                        url: url,
+                        baseURL: Config.getProxy,
+                        headers: {
+                            // eslint-disable-next-line
+                            Cookie: cookies2String(ctx.allCookies),
+                        },
+                        data: ctx.request.body,
+                    });
+                    ctx.body = response.data;
+                } catch (e) {
+                    ctx.body = e.message;
+                    ctx.status = 502;
+                }
             } else {
                 ctx.body = 'mock path are not exist!';
             }
