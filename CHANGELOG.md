@@ -13,3 +13,7 @@
 - add statusBar to toggle mock
 - optimize experience
 
+## [0.0.3] - 2021-07-20
+### Changed
+- add proxy in order to compatible already exist api
+- optimize generate code

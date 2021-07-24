@@ -1,6 +1,6 @@
 # api-complete README
 
-reduce writing api code and provide mock feature. and you can config(vscode - api complete config) proxy remote in order to compatible already exist api
+reduce writing api code and provide mock server. and you can config(vscode - api complete config) proxy remote in order to compatible already exist api
 
 ![](https://raw.githubusercontent.com/FoxDaxian/FoxDaxian.github.io/master/assets/picgo/20210724160745.png)
 
