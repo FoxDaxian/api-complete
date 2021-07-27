@@ -13,7 +13,12 @@
 - add statusBar to toggle mock
 - optimize experience
 
-## [0.0.3] - 2021-07-20
+## [0.0.4] - 2021-07-20
 ### Changed
 - add proxy in order to compatible already exist api
 - optimize generate code
+## [0.0.5] - 2021-07-27
+### Changed
+- optimization convert code, amd you can comment in comment~
+- replace '\xa0' use ' '
+- set result of response to '1'
