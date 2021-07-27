@@ -5,7 +5,8 @@ export type Obj = {
     [index: number]: any;
 };
 
-const noBreakSpace = '\xa0';
+const noBreakSpace = ' ';
+// const noBreakSpace = '\xa0';
 function setSpace(count: number, base: number = 4) {
     return noBreakSpace.repeat(count * base);
 }

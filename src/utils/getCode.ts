@@ -1,6 +1,9 @@
 import { RequestInfo } from './parse';
 import * as vscode from 'vscode';
 
+export const apiStart = '// api start';
+export const apiEnd = '// api end';
+
 type ElementType<T extends ReadonlyArray<unknown>> = T extends ReadonlyArray<
     infer ElementType
 >
@@ -19,11 +22,12 @@ export default (requestInfo: RequestInfo) => {
 const generates = {
     typescript(requestInfo: RequestInfo) {
         const textStr: string = `
+${apiStart}
 ${requestInfo.request}
 ${requestInfo.response}
 export function ${requestInfo.name}(param: ${requestInfo.name}Param): Promise<${requestInfo.name}Res> {
     return request.${requestInfo.method}('${requestInfo.url}', param);
-}\n\n`;
+}\n${apiEnd}\n`;
         return {
             textStr,
             lines: textStr.split('\n').length,
@@ -31,9 +35,10 @@ export function ${requestInfo.name}(param: ${requestInfo.name}Param): Promise<${
     },
     javascript(requestInfo: RequestInfo) {
         const textStr = `
+${apiStart}
 export function ${requestInfo.name}(param) {
     return request.${requestInfo.method}('${requestInfo.url}', param);
-}\n\n`;
+}${apiEnd}\n\n`;
         return {
             textStr,
             lines: textStr.split('\n').length,

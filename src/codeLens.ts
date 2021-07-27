@@ -29,7 +29,7 @@ class MyCodeLens implements CodeLensProvider {
                     new CodeLens(range, {
                         title: 'convert code',
                         command: 'api-complete.generateCode',
-                        arguments: [document.uri, i],
+                        arguments: [document.uri, i + 1],
                     }),
                     // new CodeLens(range, {
                     //     title: 'turn mock on',

@@ -1,9 +1,12 @@
 import * as vscode from 'vscode';
 
+export const acStart = '// @ac-start';
+
 function generateCode (document: vscode.TextDocument) {
     vscode.window.activeTextEditor?.insertSnippet(
         new vscode.SnippetString(
-            `// @ac-start
+            `
+${acStart}
 // @ac-method-url
 // post /demo/url
 //

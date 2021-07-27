@@ -15,9 +15,9 @@ const commonMethod: string[] = [
 ];
 const space =
     '[\t|\n|\v|\f|\r| |\u00a0|\u2000|\u2001|\u2002|\u2003|\u2004|\u2005|\u2006|\u2007|\u2008|\u2009|\u200a|\u200b|\u2028|\u2029|\u3000]';
-const comment = new RegExp(`\/\/${space}`, 'g');
+const comment = new RegExp(`\/\/${space}?`, 'g');
+const trailingComment = /(\/\/[^/]+)(\/\/.*)?/g;
 const startFlag = '@ac-start';
-
 
 const requestInfo = {
     name: 'fetchData',
@@ -33,15 +33,14 @@ export interface MockApi {
     [key: string]: RequestInfo;
 }
 
-
 type RequestInfoKey = keyof typeof requestInfo;
 export default (text: string, state: vscode.Memento) => {
     const apiKey = getWorkspacePath();
     const textArr = text
         .replace(startFlag, '')
-        .replace(comment, '')
         .split(/\n/g)
-        .filter((_) => _);
+        .filter((_) => _)
+        .map((_) => _.replace(trailingComment, '$1').replace(comment, ''));
     const stack: string[] = [];
 
     let curText: string;

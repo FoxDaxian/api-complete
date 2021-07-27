@@ -90,7 +90,11 @@ export default (res: string) => {
             }
             return _res;
         }
-        return dfs(resInterface);
+        const response = dfs(resInterface);
+        if (response.result) {
+            response.result = '1';
+        }
+        return response;
     } catch (e) {}
     return 'response parse error, this is failback content. please check your api code!!';
 };

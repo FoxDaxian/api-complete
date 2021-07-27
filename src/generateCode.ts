@@ -1,6 +1,8 @@
 import * as vscode from 'vscode';
 import parse from './utils/parse';
 import showLog from './utils/showLog';
+import { apiStart, apiEnd } from './utils/getCode';
+import { acStart } from './addApi';
 
 export default (context: vscode.ExtensionContext) => {
     const state: vscode.Memento = context.workspaceState;
@@ -19,7 +21,10 @@ export default (context: vscode.ExtensionContext) => {
             if (!uri || !endLen) {
                 return;
             }
-            const document = vscode.window.activeTextEditor?.document;
+            if (!vscode.window.activeTextEditor) {
+                return;
+            }
+            const document = vscode.window.activeTextEditor.document;
             if (!document) {
                 return;
             }
@@ -32,10 +37,58 @@ export default (context: vscode.ExtensionContext) => {
                         ),
                         state
                     );
+                    // get replace position
+                    const restTextArr = document
+                        .getText(
+                            new vscode.Range(endLen, 0, document.lineCount, 0)
+                        )
+                        .split('\n');
+                    let apiStartIndex = -1;
+                    let apiEndIndex = -1;
+                    for (let i = 0, len = restTextArr.length; i < len; ++i) {
+                        if (restTextArr[i].includes(apiStart)) {
+                            apiStartIndex = endLen + i;
+                        }
+                        if (restTextArr[i].includes(apiEnd)) {
+                            apiEndIndex = endLen + i;
+                        }
+                        if (restTextArr[i].includes(acStart)) {
+                            if (apiEndIndex === -1) {
+                                apiStartIndex = apiEndIndex = endLen;
+                            }
+                            break;
+                        }
+                    }
+                    if (apiEndIndex === -1 || apiStartIndex === -1) {
+                        apiStartIndex = apiEndIndex = endLen;
+                    }
+
                     vscode.window.activeTextEditor?.insertSnippet(
-                        new vscode.SnippetString(textStr),
-                        new vscode.Range(endLen + 1, 0, endLen + info.lines, 500) // todo
+                        new vscode.SnippetString(
+                            textStr +
+                                document.getText(
+                                    new vscode.Range(
+                                        apiEndIndex + 1,
+                                        0,
+                                        document.lineCount,
+                                        0
+                                    )
+                                )
+                        ),
+                        new vscode.Range(endLen, 0, document.lineCount, 0) // todo
                     );
+                    // how to move cursor to suitable position?
+                    // setTimeout(function () {
+                    //     const editor = vscode.window.activeTextEditor;
+                    //     const position = editor?.selection.active;
+
+                    //     var newPosition = position?.with(apiStartIndex, 0);
+                    //     var newSelection = new vscode.Selection(
+                    //         newPosition,
+                    //         newPosition
+                    //     );
+                    //     editor.selection = newSelection;
+                    // }, 500);
                     break;
                 }
             }
