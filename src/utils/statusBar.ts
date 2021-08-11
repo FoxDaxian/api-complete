@@ -10,9 +10,6 @@ export default class StatusBar {
                 500
             );
         }
-        if (!StatusBar.changed) {
-            StatusBar.changed = true;
-        }
         StatusBar._statusBarItem.show();
 
         return StatusBar._statusBarItem;
@@ -42,6 +39,9 @@ export default class StatusBar {
     }
 
     public static offline(port: Number) {
+        if (!StatusBar.changed) {
+            StatusBar.changed = true;
+        }
         StatusBar.statusbar.text = `$(circle-slash) Port : ${port}`;
         StatusBar.statusbar.command = 'api-complete.mock';
         StatusBar.statusbar.tooltip = 'Click to close server';

@@ -3,7 +3,7 @@
     "publisher": "foxDaxian",
     "displayName": "api-complete",
     "description": "reduce writing api code and provide mock server",
-    "version": "0.0.6",
+    "version": "0.0.7",
     "engines": {
         "vscode": "^1.57.0",
         "node": ">= 12.0.0"

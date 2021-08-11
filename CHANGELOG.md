@@ -30,3 +30,9 @@
 ### Changed
 - fixed port detect, now only support '0.0.0.0'!
 
+
+
+## [0.0.7] - 2021-08-11
+### Changed
+- update statusBar text change timing
+
