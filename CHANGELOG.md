@@ -17,8 +17,16 @@
 ### Changed
 - add proxy in order to compatible already exist api
 - optimize generate code
+
+
 ## [0.0.5] - 2021-07-27
 ### Changed
 - optimization convert code, amd you can comment in comment~
 - replace '\xa0' use ' '
 - set result of response to '1'
+
+
+## [0.0.6] - 2021-08-11
+### Changed
+- fixed port detect, now only support '0.0.0.0'!
+
