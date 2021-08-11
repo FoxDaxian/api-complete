@@ -1,5 +1,6 @@
 import { StatusBarItem, window, StatusBarAlignment } from 'vscode';
 export default class StatusBar {
+    private static changed: boolean = false;
     private static _statusBarItem: StatusBarItem;
 
     private static get statusbar() {
@@ -9,6 +10,9 @@ export default class StatusBar {
                 500
             );
         }
+        if (!StatusBar.changed) {
+            StatusBar.changed = true;
+        }
         StatusBar._statusBarItem.show();
 
         return StatusBar._statusBarItem;
@@ -17,6 +21,9 @@ export default class StatusBar {
     static init() {
         StatusBar.working('loading...');
         setTimeout(function () {
+            if (StatusBar.changed) {
+                return;
+            }
             StatusBar.live();
         }, 1000);
     }

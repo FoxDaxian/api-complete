@@ -10,6 +10,8 @@ import Config from './utils/config';
 import request, { Method } from 'axios';
 import cookies, { cookies2String } from './utils/koa-cookies';
 import * as bodyParser from 'koa-bodyparser';
+import checkPort from './utils/checkPort';
+
 
 interface Sockets {
     [key: string]: Net.Socket;
@@ -17,7 +19,6 @@ interface Sockets {
 
 let working = false;
 export default (context: vscode.ExtensionContext) => {
-    let port = 3000;
     let server: Net.Server;
     const apiKey = getWorkspacePath();
     const app = new koa();
@@ -42,17 +43,12 @@ export default (context: vscode.ExtensionContext) => {
             // Extend socket lifetime for demo purposes
             socket.setTimeout(4000);
         });
-        server.on('error', (e: NodeJS.ErrnoException) => {
-            if (e.code === 'EADDRINUSE') {
-                startServe(++port);
-            }
-        });
-        server.on('listening', () => {
+        server.once('listening', () => {
             working = true;
             StatusBar.offline(port);
             showLog(`service has been startd on port: ${port}.`);
         });
-        server.on('close', () => {
+        server.once('close', () => {
             StatusBar.live();
             showLog('stop server successed.');
         });
@@ -112,7 +108,17 @@ export default (context: vscode.ExtensionContext) => {
                 ctx.body = 'mock path are not exist!';
             }
         });
-
-        startServe(port);
+        function start(port: number) {
+            checkPort(port, (err, inUse?: boolean) => {
+                if (err) {
+                    showLog(`${err.code}: ${err.message}`);
+                } else if (inUse) {
+                    start(port + 1);
+                } else {
+                    startServe(port);
+                }
+            });
+        }
+        start(3000);
     });
 };
