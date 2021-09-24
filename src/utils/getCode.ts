@@ -19,6 +19,22 @@ export default (requestInfo: RequestInfo) => {
     return generates[fileType as SupportedLanguages](requestInfo);
 };
 
+const getParam = (requestInfo: RequestInfo): string => {
+    let res: string;
+    switch (requestInfo.method) {
+        case 'get':
+            res = '{ params: param }';
+            break;
+        case 'post':
+            res = 'param';
+            break;
+        default:
+            res = 'param';
+            break;
+    }
+    return res;
+};
+
 const generates = {
     typescript(requestInfo: RequestInfo) {
         const textStr: string = `
@@ -26,7 +42,7 @@ ${apiStart}
 ${requestInfo.request}
 ${requestInfo.response}
 export function ${requestInfo.name}(param: ${requestInfo.name}Param): Promise<${requestInfo.name}Res> {
-    return request.${requestInfo.method}('${requestInfo.url}', param);
+    return request.${requestInfo.method}('${requestInfo.url}', ${getParam(requestInfo)});
 }\n${apiEnd}\n`;
         return {
             textStr,
