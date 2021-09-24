@@ -80,27 +80,28 @@ export default (context: vscode.ExtensionContext) => {
 
         app.use(async (ctx) => {
             const mockApi: MockApi = state.get(apiKey, {});
-            const { url, method } = ctx;
+            const { path, method, query } = ctx;
 
-            if (url === '/favicon.ico') {
+            if (path === '/favicon.ico') {
                 return (ctx.status = 204);
             }
-            if (mockApi[url] && mockApi[url].method === method.toLowerCase()) {
-                ctx.body = randomRes(mockApi[url].response);
+            if (mockApi[path] && mockApi[path].method === method.toLowerCase()) {
+                ctx.body = randomRes(mockApi[path].response);
             } else if (Config.getProxy) {
                 try {
                     const response = await request({
                         method: method.toLowerCase() as Method,
-                        url: url,
+                        url: path,
                         baseURL: Config.getProxy,
                         headers: {
                             // eslint-disable-next-line
                             Cookie: cookies2String(ctx.allCookies),
                         },
+                        params: query,
                         data: ctx.request.body,
                     });
                     ctx.body = response.data;
-                } catch (e) {
+                } catch (e: any) {
                     ctx.body = e.message;
                     ctx.status = 502;
                 }
