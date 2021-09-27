@@ -1,5 +1,12 @@
 # Change Log
 
+
+## [0.0.10] - 2021-09-24
+
+### Changed
+
+- optimize: reduce mock data count and string length
+
 ## [0.0.9] - 2021-09-24
 
 ### Changed

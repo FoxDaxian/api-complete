@@ -1,5 +1,6 @@
 import getType from './getType';
 import { Obj } from './json2interface';
+const cloneDeep = require('lodash/fp/cloneDeep');
 
 const str = [
     '0',
@@ -39,19 +40,20 @@ const str = [
     'Y',
     'Z',
 ];
+const strLen = 35;
 function getRandomString() {
     let res = '';
-    for (let i = 0, len = str.length; i < len; ++i) {
-        const id = Math.ceil(Math.random() * 35);
+    for (let i = 0, len = 10; i < len; ++i) {
+        const id = Math.ceil(Math.random() * strLen);
         res += str[id];
     }
     return res;
 }
 function getRandomNumber() {
-    return Math.random() * 100;
+    return (Math.random() * 100) >>> 0;
 }
 function getRandomBoolean() {
-    return Boolean(Math.floor(Math.random() * 2));
+    return Boolean((Math.random() * 2) >>> 0);
 }
 
 export default (res: string) => {
@@ -61,9 +63,9 @@ export default (res: string) => {
             const isArray = getType(_interface) === 'array';
             let _res: Obj = isArray ? [] : {};
             if (isArray) {
-                const randomLen = ~~(Math.random() * 30) + 15;
+                const randomLen = ((Math.random() * 10) >>> 0) + 10;
                 for (let i = 0; i < randomLen; ++i) {
-                    _interface.push(_interface[0]);
+                    _interface.push(cloneDeep(_interface[0]));
                 }
             }
             let curType: string;
