@@ -53,7 +53,7 @@ export default (text: string, state: vscode.Memento) => {
                 if (curText.startsWith('@ac-')) {
                     curText = curText.replace('@ac-', '');
                     if (curText.includes('method-url')) {
-                        let [method, url] = partText.split(' ');
+                        let [method, url] = partText.split(/\s+/).filter(_ => _);
                         if (!commonMethod.includes(method)) {
                             [method, url] = [url, method];
                         }
